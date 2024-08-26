@@ -33,7 +33,15 @@ const reviewRoutes = require('./routes/reviews');
 const userRoutes = require('./routes/users');
 
 //Link MongoAtlas for deployment
-const dbUrl = process.env.DB_URL;
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
+
+mongoose.connect(dbUrl)
+    .then(() => {
+        console.log('Database Connected.')
+    }).catch(err => {
+        console.log('Database Error.');
+        console.log(err);
+    })
 
 const store = MongoStore.create({
     mongoUrl: dbUrl,
@@ -46,14 +54,6 @@ const store = MongoStore.create({
 store.on('error', function (e) {
     console.log('Session store error:', e)
 })
-
-mongoose.connect(dbUrl)
-    .then(() => {
-        console.log('Database Connected.')
-    }).catch(err => {
-        console.log('Database Error.');
-        console.log(err);
-    })
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
