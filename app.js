@@ -146,12 +146,6 @@ app.use((req, res, next) => {
     next();
 })
 
-app.get('/fakeUser', async (req, res) => {
-    const user = await new User({ email: 'coltt@gmail.com', username: 'coltt' });
-    const newUser = await User.register(user, 'password');
-    res.send(newUser);
-})
-
 //Use public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
