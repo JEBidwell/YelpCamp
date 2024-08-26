@@ -43,6 +43,15 @@ mongoose.connect(dbUrl)
         console.log(err);
     })
 
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.engine('ejs', ejsMate);
+
+app.use(methodOverride('_method'));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(mongoSanitize());
+
 const store = MongoStore.create({
     mongoUrl: dbUrl,
     touchAfter: 24 * 60 * 60, // A day in seconds
@@ -54,15 +63,6 @@ const store = MongoStore.create({
 store.on('error', function (e) {
     console.log('Session store error:', e)
 })
-
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-app.engine('ejs', ejsMate);
-
-app.use(methodOverride('_method'));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(mongoSanitize());
 
 const sessionConfig = {
     store, //Pass in the MongoStore
